@@ -1,0 +1,184 @@
+# The RLHF Book (Nathan Lambert)
+
+## Chapter 1: 
+
+- RLHF Basic Pipeline
+  - language model that can follow user questions must be trained
+  - human preference data must be collected for the training of a reward model  
+    of human preferences  
+  - the language model can be optimized with an RL optimizer of choice, by sampling  
+    generations and rating them with respect to the reward model  
+
+Post-training can be summarized as a many-stage training process using three optimization methods:
+
+1.**Instruction / Supervised Fine-tuning** (IFT/SFT), where we teach
+formatting and form the base of instruction-following abilities. This is
+largely about learning features in language.
+
+2. **Preference Fine-tuning** (PreFT), where we align to human preferences
+(and get smaller bump in capabilities at the same time). This is largely
+about style of language and subtle human preferences that are hard to
+quantify.
+
+3. **Reinforcement Learning with Verifiable Rewards** (RLVR). The newest type
+of post-training that boosts performance on verifiable domains with more
+RL training.
+
+- RLHF lives in and dominates **prefernce fine-tuning**
+
+- RLHF tunes the responses on the response level rather than looking at the next token specifically
+- it is telling the model what a better response looks like, rather than a specific response it should learn. 
+-RLHF also shows a model which type of response it should avoid, i.e. negative feedback.
+
+- The training to achieve this is often called a contrastive loss function
+
+- Elicitation Theory of Post-training
+  - Base models determine the vast majority of the potential of a final model, 
+    and post-training’s job is to cultivate all of it
+	
+- Superficial Alignment Hypothesis
+  Paper: "LIMA: Less is More for Alignment"
+  
+- The first shift in open alignment methods and post-training was the story of
+  **Direct Preference Optimization** (DPO)
+  
+- The primary areas of innovation in post-training are now in **reinforcement learning with
+verifiable rewards** (RLVR), reasoning training generally, and related ideas
+  
+    
+	
+## Chapter 2: A Tiny History of RLHF
+
+This chapter covers
+- The three eras of RLHF’s recent history
+- Seminal models and papers that shaped RLHF
+
+
+### Origins - 2018: RL on Preferences
+
+- Field popularized with growth of Deep Reinforcement Learning
+
+- One of the first papers with an approach similar to modern RLHF was **TAMER**.
+  TAMER: Training an Agent Manually via Evaluative Reinforcement proposed an approach
+  in which humans iteratively scored an agent’s actions to learn a reward model, which
+  was used to learn the action policy [4]. 
+
+- Other concurrent or soon after work proposed an **actor-critic** algorithm,
+  **COACH**,  where human feedback (both positive and negative) is used to tune
+  the advantage function [5].
+  
+
+### 2019 to 2022: RL from Human Preferences on Language Models
+
+Aside from applications, a number of seminal papers defined key areas for the future of
+RLHF, including those on:
+
+1. Reward model over-optimization [17]: The ability for RL optimizers to
+over-fit to models trained on preference data,
+
+2. Language models as a general area of study for alignment [18],
+
+3. Red teaming [19] – the process of assessing the safety of a language model.
+
+
+### 2023 to Present: ChatGPT Era
+
+### References
+
+T. Kaufmann, P. Weng, V. Bengs, and E. Hüllermeier, “A survey of reinforcement
+learning from human feedback,” Transactions on Machine Learning Research
+(TMLR), 2025.
+
+
+## Chapter 3: Trining Overview
+
+This chapter covers
+- Reinforcement learning basics
+- How RLHF relates to traditional RL
+- An outline of the RLHF tools you’ll learn in this book
+- RLHF training recipes of popular models like InstructGPT and DeepSeek R1
+
+### Comparing Traditional RL and RLHF
+
+- RLHF, while optimizing a simple loss function, involves:
+  - Training multiple, different AI models in sequence
+  - Then linking them together in a complex online optimization.
+  
+- The core objective of RLHF is:
+  - Optimizing a proxy reward for human preferences with a distance-based 
+    regularizer
+  - Showing how it relates to classical RL problems
+
+- Fine-tuning and Regularization
+  - In traditional RL problems, the agent must learn from a randomly
+    initialized policy
+	
+  - In RLHF, we start from a strong pretrained model with many capabilities.
+    - The goal is not to teach the model language from scratch,
+	- The goal is to refine an already capable model toward more
+      useful behavior.
+	  - This strong prior for RLHF induces a need to prevent the optimization 
+	    from drifting too far from the initial policy.
+	  - RLHF techniques employ multiple types of regularization to control 
+	    the optimization
+    - The most common change to the optimization function is to add a distance
+	  penalty on the difference between the current RLHF policy and the
+	  starting point of the optimization, called the reference policy
+	  - Use the Kullback-Leibler divergence, which measures how one probability
+        distribution differs from another
+	  - Penalizes the RL policy for deviating too far from the reference.
+	  
+### Optimization Tools
+
+Various techniques for solving this type of optimization problem
+
+- **Reward modeling** (Chapter 5): Where a model is trained to capture the
+signal from collected preference data and can then output a scalar reward
+indicating the quality of future text.
+
+- **Instruction fine-tuning** (Chapter 4): A prerequisite to RLHF where
+  models are taught the question-answer format used in the majority of
+  language modeling interactions today by imitating preselected examples.
+
+- **Rejection sampling** (Chapter 9): The most basic RLHF technique where
+  candidate completions for instruction fine-tuning are filtered by a reward
+  model imitating human preferences.
+
+- **Policy gradients** (Chapter 6): The reinforcement learning algorithms
+  used in the seminal examples of RLHF to update parameters of a
+  language model with respect to the signal from a reward model.
+
+- **Direct alignment algorithms** (Chapter 8): Algorithms that directly
+  optimize a policy from pairwise preference data, rather than learning an
+  intermediate reward model to then optimize later.
+  
+  
+### Canonical Training Recipes
+
+#### InstructGPT
+
+- 1. Instruction tuning on ~10K examples
+- 2. Training a reward model on ~100K pairwise prompts
+- 3. Training the instruction-tuned model with RLHF on another ~100K
+  prompts
+	
+#### Tülu 3
+
+A fully open example of this multi-stage approach to post-training where RLHF plays a
+major role is Tülu 3. The Tülu 3 recipe consists of three stages:
+
+1. **Instruction tuning on ~1M examples**: This primarily synthetic data
+from a mix of frontier models such as GPT-4o and Llama 3.1 405B
+teaches the model general instruction following and serves as the
+foundation of a variety of capabilities such as mathematics or coding.
+
+2. **On-policy preference data on ~1M preference pairs**: This stage
+substantially boosts the chattiness (e.g. ChatBotArena or AlpacaEval 2) of
+the model while also improving skills mentioned above in the instruction
+tuning stage.
+
+3. **Reinforcement Learning with Verifiable Rewards on ~10K prompts**:
+This stage is a small-scale reinforcement learning run to boost
+core skills such as mathematics while maintaining overall performance
+(and is now seen as a precursor to modern reasoning models such as
+DeepSeek R1).

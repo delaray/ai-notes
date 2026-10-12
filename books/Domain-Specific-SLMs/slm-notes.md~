@@ -1,0 +1,56 @@
+# Domain-specific Small Language Models
+
+# Chapter 1: Small Language Models
+
+- Typically 100 millions to 10 billions parameters
+- No official cut-off point
+
+- NVIDIA 2025
+  - "Small Language Models are the Future of Agentic AI”
+  - https://arxiv.org/abs/2506.02153
+  
+- Two families of Transformers
+  - BERT: Just uses the encoder part
+  - GPT: Just uses the decoder part
+  
+- RLHF: Important aspect of transformers evolution
+
+- LLM Areas of Application
+
+  - Language understanding
+  - Text classification
+  - Test generation
+  - Question answering
+  - Document summarization
+  - Semantic parsing
+  - Pattern recognition
+  - Basic math solving
+  - Code generation
+  - Dialogue
+  - General knowledge
+  - Logical inference chains
+  
+- The open source revolution
+
+- Risks and challenges with generalist LLMs
+  - Deployment outside your organization’s network
+  - Data leakage risks
+  - Model or version drift
+  - Cost unpredictability
+  - Closeness
+  - Transparency
+  - Hallucinations
+  - Compliance
+  - Harmful content generation
+  - Code generation
+  
+  
+- Domain-specific vs. generalist LLMs for business value
+  - For specialized domains and tasks, you’ll need a strategy to tune the pretrained model
+    on domain-specific data
+  - This porocess is commonly called **Transfer Learning**
+  - Transfer Learning involves taking a model trained on one task or domain and applying it
+	to a related task or domain.
+  - Can use full SFT or partial (subset of layers) SFT. 
+  - Catastrophic forgetting is a noticeable drop in performance on general knowledge or
+    initial capabilities due to a model being trained on new data and tasks.

@@ -1,0 +1,28 @@
+# Chapter 10: Introduction to LLM Agents & LangGraph
+
+The shift from chains to agents is a shift from ﬁxed pipelines to systems
+that can decide what step to take next.
+  
+Agents introduce more moving parts than chains:
+
+	state
+    tool calls
+	loops
+	branching decisions
+	failure handling
+	multiple cooperating actors.
+	
+An agent has a goal, observes the current situation, chooses an action,
+sees the result, and decides what to do next.
+
+	autonomy
+	adaptive reasoning
+	language understanding
+	workflow optimization
+	multi-agent & system interaction
+
+LangChain’s founder, **Harrison Chase**, has described every agent as resting on
+four building blocks: Planning, Memory, Tools, and Action. They run in a loop
+until the task is done. This loop is the basic shape behind many agent systems,
+whether the implementation is a few lines of Python or a production LangGraph
+application.

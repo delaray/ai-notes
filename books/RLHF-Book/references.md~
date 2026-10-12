@@ -1,0 +1,155 @@
+## Chapter 1 References
+
+[1] P. F. Christiano, J. Leike, T. Brown, M. Martic, S. Legg, and D. Amodei, “Deep
+reinforcement learning from human preferences,” Advances in neural information
+processing systems, vol. 30, 2017.
+
+[2] N. Stiennon et al., “Learning to summarize with human feedback,” Advances in
+Neural Information Processing Systems, vol. 33, pp. 3008–3021, 2020.
+
+[3] L. Ouyang et al., “Training language models to follow instructions with human
+feedback,” Advances in neural information processing systems, vol. 35, pp. 27730–
+27744, 2022.
+
+[4] R. Nakano et al., “Webgpt: Browser-assisted question-answering with human
+feedback,” arXiv preprint arXiv:2112.09332, 2021.
+
+[5]  Y. Bai et al., “Training a helpful and harmless assistant with reinforcement learning from human feedback,” arXiv preprint arXiv:2204.05862, 2022.
+
+[6] N. Lambert et al., “Tulu 3: Pushing frontiers in open language model post-
+training,” arXiv preprint arXiv:2411.15124, 2024.
+
+[7] A. Grattafiori et al., “The llama 3 herd of models,” arXiv preprint N. Lambert et al., “Tulu 3: Pushing frontiers in open language model post-
+training,” arXiv preprint arXiv:2411.15124, 2024.
+arXiv:2407.21783, 2024.
+
+[8] R. Kirk et al., “Understanding the effects of rlhf on llm generalisation and diversity,” in International conference on learning representations (ICLR), 2024.
+
+[9] T. Chu et al., “Sft memorizes, rl generalizes: A comparative study of foundation model post-training,” in International conference on machine learning (ICML), 2025.
+
+[10] P. Singhal, T. Goyal, J. Xu, and G. Durrett, “A long way to go: Investigating length correlations in rlhf,” arXiv preprint arXiv:2310.03716, 2023.
+
+[11] R. Park, R. Rafailov, S. Ermon, and C. Finn, “Disentangling length from quality in direct preference optimization,” in Findings of the association for computational
+linguistics: ACL 2024, 2024, pp. 4998–5017.
+
+[12] N. Muennighoff et al., “Olmoe: Open mixture-of-experts language models,” in
+International conference on learning representations (ICLR), 2025.
+
+[13] Allen Institute for Artificial Intelligence, “OLMoE, meet iOS.” https://allenai.​org/blog/​olmoe-app, 2025.
+
+[14] C. Zhou et al., “Lima: Less is more for alignment,” Advances in Neural Information Processing Systems, vol. 36, pp. 55006–55021, 2023.
+
+[15] R. Taori et al., “Stanford alpaca: An instruction-following LLaMA model,” GitHub
+repository. https://github.​com/tatsu-​lab/stanford_​alpaca; GitHub, 2023.
+
+[16] W.-L. Chiang et al., “Vicuna: An open-source chatbot impressing GPT-4 with 90%*
+ChatGPT quality.” 2023. Available: https://lmsys.​org/blog/​2023-03-30-​vicuna/
+
+[17] X. Geng et al., “Koala: A dialogue model for academic research.” Blog post, 2023.
+Accessed: Apr. 03, 2023. [Online]. Available: https://bair.​berkeley.​edu/blog/​ 2023/04/03/​koala/
+
+[18] M. Conover et al., “Hello dolly: Democratizing the magic of ChatGPT with open
+models.” Accessed: Jun. 30, 2023. [Online]. Available: https://www.​databricks.​ com/blog/​2023/03/24/​hello-dolly-​democratizing-​magic-chatgpt-​open-models.​html
+
+[19] A. Askell et al., “A general language assistant as a laboratory for alignment,” arXiv preprint arXiv:2112.00861, 2021.
+
+[20] Y. Bai et al., “Constitutional ai: Harmlessness from ai feedback,” arXiv preprint
+arXiv:2212.08073, 2022. 
+
+[21] R. Rafailov, A. Sharma, E. Mitchell, C. D. Manning, S. Ermon, and C. Finn, “Direct preference optimization: Your language model is secretly a reward model,” Advances
+in Neural Information Processing Systems, vol. 36, 2023.
+
+[22] L. Tunstall et al., “Zephyr: Direct distillation of LM alignment,” in First conference on language modeling, 2024. Available: https://openreview.​net/forum?​id=aKkAwZB6JV
+
+[23] H. Ivison et al., “Camels in a changing climate: Enhancing lm adaptation with tulu 2,” arXiv preprint arXiv:2311.10702, 2023.
+
+[24] G. Cui et al., “Ultrafeedback: Boosting language models with high-quality feedback,” 2023.
+
+[25] B. Adler et al., “Nemotron-4 340B technical report,” arXiv preprint
+arXiv:2406.11704, 2024.
+
+
+
+## Chapter 2 References
+
+[1] C. Wirth, R. Akrour, G. Neumann, and J. Fürnkranz, “A survey of preference-based
+reinforcement learning methods,” Journal of Machine Learning Research, vol. 18, no.
+136, pp. 1–46, 2017.
+[2] T. Kaufmann, P. Weng, V. Bengs, and E. Hüllermeier, “A survey of reinforcement
+learning from human feedback,” Transactions on Machine Learning Research
+(TMLR), 2025.
+© Manning Publications Co. To comment go to liveBook
+Licensed to Raymond de Lacaze <delaray@hotmail.com>17
+[3] S. Casper et al., “Open problems and fundamental limitations of reinforcement
+learning from human feedback,” Transactions on Machine Learning Research
+(TMLR), 2023.
+[4] W. B. Knox and P. Stone, “Tamer: Training an agent manually via evaluative
+reinforcement,” in 2008 7th IEEE international conference on development and
+learning, IEEE, 2008, pp. 292–297.
+[5] J. MacGlashan et al., “Interactive learning from policy-dependent human feedback,”
+in International conference on machine learning, PMLR, 2017, pp. 2285–2294.
+[6] P. F. Christiano, J. Leike, T. Brown, M. Martic, S. Legg, and D. Amodei, “Deep
+reinforcement learning from human preferences,” Advances in neural information
+processing systems, vol. 30, 2017.
+[7] B. Ibarz, J. Leike, T. Pohlen, G. Irving, S. Legg, and D. Amodei, “Reward learning
+from human preferences and demonstrations in atari,” Advances in neural
+information processing systems, vol. 31, 2018.
+[8] G. Warnell, N. Waytowich, V. Lawhern, and P. Stone, “Deep tamer: Interactive agent
+shaping in high-dimensional state spaces,” in Proceedings of the AAAI conference on
+artificial intelligence, 2018.
+[9] J. Leike, D. Krueger, T. Everitt, M. Martic, V. Maini, and S. Legg, “Scalable agent
+alignment via reward modeling: A research direction,” arXiv preprint
+arXiv:1811.07871, 2018.
+[10] D. M. Ziegler et al., “Fine-tuning language models from human preferences,” arXiv
+preprint arXiv:1909.08593, 2019.
+[11] N. Stiennon et al., “Learning to summarize with human feedback,” Advances in
+Neural Information Processing Systems, vol. 33, pp. 3008–3021, 2020.
+[12] J. Wu et al., “Recursively summarizing books with human feedback,” arXiv preprint
+arXiv:2109.10862, 2021.
+[13] L. Ouyang et al., “Training language models to follow instructions with human
+feedback,” Advances in neural information processing systems, vol. 35, pp. 27730–
+27744, 2022.
+[14]R. Nakano et al., “Webgpt: Browser-assisted question-answering with human feedback,” arXiv preprint arXiv:2112.09332, 2021.
+[15]J. Menick et al., “Teaching language models to support answers with verified quotes,” arXiv preprint arXiv:2203.11147, 2022.
+[16]A. Glaese et al., “Improving alignment of dialogue agents via targeted human judgements,” arXiv preprint arXiv:2209.14375, 2022.
+© Manning Publications Co. To comment go to liveBook
+Licensed to Raymond de Lacaze <delaray@hotmail.com>18
+[17] L. Gao, J. Schulman, and J. Hilton, “Scaling laws for reward model
+overoptimization,” in International conference on machine learning, PMLR, 2023, pp.
+10835–10866.
+[18]A. Askell et al., “A general language assistant as a laboratory for alignment,” arXiv preprint arXiv:2112.00861, 2021.
+[19]D. Ganguli et al., “Red teaming language models to reduce harms: Methods, scaling behaviors, and lessons learned,” arXiv preprint arXiv:2209.07858, 2022.
+[20]Y. Bai et al., “Training a helpful and harmless assistant with reinforcement learning from human feedback,” arXiv preprint arXiv:2204.05862, 2022.
+[21]R. Ramamurthy et al., “Is reinforcement learning (not) for natural language processing: Benchmarks, baselines, and building blocks for natural language policy
+optimization,” in International conference on learning representations (ICLR), 2023.
+[22] A. Havrilla et al., “TrlX: A framework for large scale reinforcement learning from
+human feedback,” in Proceedings of the 2023 conference on empirical methods in
+natural language processing, Singapore: Association for Computational Linguistics,
+Dec. 2023, pp. 8578–8595. doi: 10.18653/v1/2023.emnlp-main.530.
+[23] L. von Werra et al., “TRL: Transformer reinforcement learning,” GitHub repository.
+https://github.​com/huggingface/​trl; GitHub, 2020.
+[24] OpenAI, “ChatGPT: Optimizing language models for dialogue.” https://openai.​
+com/blog/​chatgpt/, 2022.
+[25] Y. Bai et al., “Constitutional ai: Harmlessness from ai feedback,” arXiv preprint
+arXiv:2212.08073, 2022.
+[26] H. Touvron et al., “Llama 2: Open foundation and fine-tuned chat models,” arXiv
+preprint arXiv:2307.09288, 2023.
+[27] A. Grattafiori et al., “The llama 3 herd of models,” arXiv preprint arXiv:2407.21783,
+2024.
+[28] B. Adler et al., “Nemotron-4 340B technical report,” arXiv preprint
+arXiv:2406.11704, 2024.
+[29] N. Lambert et al., “Tulu 3: Pushing frontiers in open language model post-training,”
+arXiv preprint arXiv:2411.15124, 2024.
+[30] H. Lightman et al., “Let’s verify step by step,” in International conference on
+learning representations (ICLR), 2024.
+[31] R. Rafailov, A. Sharma, E. Mitchell, C. D. Manning, S. Ermon, and C. Finn, “Direct
+preference optimization: Your language model is secretly a reward model,” Advances
+in Neural Information Processing Systems, vol. 36, 2023.
+© Manning Publications Co. To comment go to liveBook
+Licensed to Raymond de Lacaze <delaray@hotmail.com>19
+[32] A. Kumar et al., “Training language models to self-correct via reinforcement
+learning,” in International conference on learning representations (ICLR), 2025.
+[33] A. Singh et al., “Beyond human data: Scaling self-training for problem-solving with
+language models,” Transactions on Machine Learning Research (TMLR), 2024.
+[34] OpenAI, “Introducing OpenAI o1-preview.” Sep. 2024. Available: https://openai.​
+com/index/​introducing-​openai-o1-​preview/

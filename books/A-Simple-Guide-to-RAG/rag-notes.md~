@@ -1,0 +1,67 @@
+## Chapter 1: LLMs and the Need for RAG
+
+### This Chapter Covers
+
+- The limits of LLMs and the need for RAG
+- The RAG basics
+- Popular use cases of RAG
+
+### Summary
+
+- RAG enhances the memory of LLMs by providing access to external information.
+- LLMs are next-word (or token) prediction models trained on massive amounts
+  of text data to generate human-like text.
+- LLMs face challenges of having a knowledge cut-off date and being trained only
+  on public data. They are also prone to generating factually incorrect information
+  (i.e., hallucinating).
+- RAG overcomes the LLM limitations by incorporating non-parametric memory
+  and increases context awareness and reliability of responses.
+- Popular use cases of RAG include search engines, document question-answering
+  systems, conversational agents, personalized content generation, virtual assis-
+  tants, and so forth.
+  
+  
+## Chapter 2: RAG Systems and their Designs
+
+### This Chapter Covers
+
+- The concept and design of RAG systems
+- An overview of the indexing pipeline
+- An overview of the generation pipeline
+- An initial look at RAG evaluation
+- A high-level look at the RAG operations stack
+
+### Summary
+
+- A RAG-enabled system consists of two main pipelines: the indexing and the generation pipeline.  
+
+- The indexing pipeline is responsible for creating and maintaining the knowledge base,  
+  which involves data loading, text splitting, data conversion (embeddings), and data  
+  storage in a vector database.  
+  
+- The generation pipeline manages real-time interactions by retrieving information,  
+  augmenting queries, and generating responses using an LLM.  
+  
+- Evaluation and monitoring are crucial components for the assessment of system  
+  performance, covering the relevance between the retrieved information and  
+  query, the final response and retrieved information, and the final response and  
+  the original query.  
+  
+- The service infrastructure for RAG systems includes layers for data, models,  
+  prompts, evaluation, app orchestration, deployment, application hosting, and  
+  monitoring.  
+  
+- Additional components such as caching, guardrails, and security measures are often  
+  employed to improve performance, ensure compliance, and address potential threats.  
+  
+  
+
+## Chapter 3: Indexing pipeline: Creating a Knowledge Base for RAG
+
+### This Chapter Covers
+
+- Data loading
+- Text splitting or chunking
+- Converting text to embeddings
+- Storing embeddings in vector databases
+- Examples in Python using LangChain
