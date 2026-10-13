@@ -1,0 +1,300 @@
+# Kubernetes Essentials
+
+## Module 1: High Level Overview
+
+### Intro to the Course
+
+### Full Specialization Resources
+
+### Overview of the Section
+
+### Why Choose Kubernetes
+
+## Understanding the Kubernetes Architecture
+
+!(Diagram)[images/kubernetes-essentials-M1-05-Kubernetes-Architecture.png]
+
+### The Control Plane in Kuberntes
+
+!(Control Plane Diagram)([images/kubernetes-essentials-M1-06-Kubernetes-Control-Plane.png]
+
+### The Data Plane in Kubernetes
+
+!(Data Plane Diagram)[images/kubernetes-essentials-M1-06-Kubernetes-Data-Plane-Worker-Nodes.png]
+
+### The kubectl CLI
+
+!(Kubectl CLI Diagram)[images/kubernetes-essentials-M1-07-The-kubectl-CLI.png]
+
+### High Lelel Overview Assessment (Graded)
+
+### Introduction to Kubernetes (Dialogue)
+
+
+## Module 2: Installing Tools
+
+- MAC OS
+- Linux
+- Windows WSL
+
+Installed kubectl m& minilube
+
+Start minikube server and create defaulkt cluster:
+
+	minikube start
+	
+Check client / server version compatibility:
+	
+	kubetcl version
+	
+		Client Version: v1.35.8-dispatcher
+		Kustomize Version: v5.7.1
+		Server Version: v1.35.1
+		
+
+## Module 3: Running Containers with Kubernetes
+
+### Overview of the Section
+
+### Introduction to Pods
+
+- Smallest and simplest unit avilable to run containers.
+- Represent a single instance of running a process in your cluster
+  - Encapsuilate oned or more containers
+  - Allow sharing storage and network reso0urces
+  
+!(Pods Explained)[kubernetes-essentials-M1-08-Pods-Explained.png]
+
+### Understanding the Pod Lifecycle
+
+!(Pods Lifecycle)[kubernetes-essentials-M1-09-Pods-Lifecycle.png]
+
+!(Pods Error Handling)[images/kubernetes-essentials-M1-10-Pods-Error-Handling.png]
+
+### Lab: Creating Pods with Kubectl
+
+	kubectl version
+
+	kubectl config current-context
+	
+	kubectl config set-context minikube
+	
+	kubectl run nginx:1.27.0
+	
+	kubectl get pods
+	
+	
+
+### Lab: Managing Pods with Kubectl
+
+	kubectl describe pod nginx
+	
+Can comunicate using IP address within the Cluster.
+Cannot use name
+
+	kubectl logs 
+
+### Lab: Exposing Pods with Services
+
+	kubectl expose nginx --type=NodePort --port-80
+	
+Port service IP stable between restarts.
+Can use the name to communicate
+
+	kubectl delete pod nginx
+
+### Lab: Color API - Imp0lement v1.0.0.0
+
+### Lab: From Dockerfiles to Pods
+
+
+## Module 4: Object Management and YAML Manifests
+
+### Managing Objects in Kubernetes
+
+Three methods
+
+1. Imperative commands with kubctl
+2. Imperative files with kubectl
+3. Declarative configuration files
+
+### Working with Kubernetes Manifest Files
+
+A **manifest file** in Kubernetes is a file that defines the
+desired state of a certain Kubernetes object.
+They follow the YAML syntax
+They have 4 toplevel fields for most objects.
+
+	apiVersion
+	kind
+	metadata
+	spec
+	
+The set of keys for each toplevel field varies based on apiVersion and type of object.
+
+
+### Lab: Using Imperative Command Part 1
+
+	kubectl run nginx-pod --imager nginx:1.27.0
+	kubectl delete pod nginx-pod 
+	kubectl expose...
+	
+	
+
+### Lab: Using Imperative Command Part 2
+
+### Lab Generating Kubermetes Manifests with kubectl
+
+	kubectl run color-api --image=delaray/color-api:1.00 --dry-run=client -o yaml
+	
+	kubectl get pod nginx-pod -o yaml
+
+### La: Shortcomings of Imperative Commands with Config Files
+
+
+
+### Lab: Managing Objects Declaratively in Kubernetes
+
+The **apply** command can work with both files and directories
+and will create the objects described
+
+	kubectl apply -f nginx-pod.yaml
+	kubectl delete -f nginx-pod.yaml
+	
+	cd ..
+	kubectl apply -f object-management/
+
+The **diff** command shows the differences kubernetes plans to apply.
+The differences once applied are store in the annotations field in JSON.
+
+	kubernetes diff -f objectmanagement/
+
+### Lab: Creating Multiple Kubernetes Manifests in a Single File
+
+Three dashes, i.e. "---", can be used to start defining a new object
+in the same file as other objects.
+
+	<object1>
+	---
+	<object2>
+	
+
+	
+## Module 5: Working with ReplicaSets and Deployments
+
+### Overview of the section
+
+### Understanding ReplicaSets
+
+Maintain a certain number of initially identical pods
+Uses the template section in the yaml file
+Yaml file contains same 4 toplevel gields
+
+### Lab: Creating and Managing ReplicaSets
+
+	kubctl apply -f nginx-rs.yaml 
+
+### Lab: Updating Pods with ReplicaSets - Limitations
+
+If we change the template, edxisting pods are unaffected
+Changed temlate only affects newly created pods
+Mangaging changes manually is tedious
+Need a higher abstraction for udpdating and rolling out changes
+
+### Lab: Managing Existing Pods with ReplicaSets - Limitations
+
+If more pods with same label name are created ReplicaSet controller
+will terminate the additional pods.
+
+
+### Introduction to Deployments
+
+- Allow management of applications at scale
+- Higher level of abstraction than ReplicaSets
+
+- They provide:
+- **Rolling Updates**: Gradually replace old pods with new pods
+- **Rollbacks**: Roll back to a previous version of the application
+- **Declarative Updates** of the replicas over time
+- **History and revision control**: Keep track of history all changes
+- **Advanced Rollouts**: Limit risk by leveraging rollouts 
+
+- Rolling Update Mechanism
+
+1. Create a new empty replica state with new template
+2. Create new pod1 in new replicat set with new template
+3. Remove old pod1 from old replica set
+4. Repeat until old replica set is empty
+5. Delete replica set
+
+- Provides a smooth transition when updating a replica set
+
+- Useful abstraction model:
+
+		POD
+		REPLICASET
+		DEPLOYMENT
+
+### Lab: Creating and Managing Deployments
+
+ 
+
+### Lab: Updating the Pod Template in a Deployment
+
+### Lab: Understanding Deployment Rollouts
+
+	kubectl rollout <subcommand> [options]
+	
+	kubectl rollout history deployment/nginx-deployment
+	
+	kubectl annotate deployment/nginx-deployment...
+
+### Lab: Scaling Deployments with Kubectl
+
+	kubectl scale deploy nginx-deployment --replicas=3 
+	
+This is only a temporary change and the yaml file remains
+unchanged so the kubectl apply will restore the number of
+replicas to the value indicated in the deploymnt yaml file.
+
+### Lab: Troubleshooting Failed Rollouts
+
+Check the rollout status
+
+	kubectl rollout status deployment/nginx-deployment
+	
+Also look at the status of the pods
+
+	kubectl get pod
+	
+Temporary solution is to issue the *rollout undo* command, but
+that will only poersist until the next *apply* issued and the failure
+will re-occur.
+
+	kubectl rollout undo deployment nginx-deployment
+	
+Permanent fix is to fix/modify the yaml file so the next *apply*
+does nopt fail.
+
+
+## Module 6: in-Depth Look at Kubernetes Services
+
+
+### Overview of the Section
+
+### Introduction to Services in Kubernetes
+
+### Lab: Color API
+
+### Lab: Traffic Generator
+
+### Lab: Deploying the Color API and the Traffic Generator
+
+### Lab: Working with ClusterIP Services
+
+### Lab: Working with NodePort Services
+
+### Lab: Using NodePort Services in Linux
+
+### Lab: Working wiht ExternalName Services
+
