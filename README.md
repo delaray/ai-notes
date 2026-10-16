@@ -12,15 +12,15 @@
 
 ## Courses Notes
   
-[Courses](courses/README.md)  
+[Courses](courses/Coursera/README.md)  
   
-[Advanced Multi-Agent Systems](Coursera/Advanced~Multi-Agent-AI-System/README.md)  
+[Advanced Multi-Agent Systems](courses/Coursera/Advanced~Multi-Agent-AI-System/README.md)  
   
-[Docker and Kubernetes Masterclass](Coursera/Docker-and-Kubernetes-Masterclass/README.md)  
+[Docker and Kubernetes Masterclass](courses/Coursera/Docker-and-Kubernetes-Masterclass/README.md)  
   
-[Generative AI and LLMs](Coursera/Generative-AI-and-LLMs/README.md)  
+[Generative AI and LLMs](courses/Coursera/Generative-AI-and-LLMs/README.md)  
   
-[Retrieval-Augmented Generation](Coursera/Retrieval-Augmented-Generation/README.md)  
+[Retrieval-Augmented Generation](courses/Coursera/Retrieval-Augmented-Generation/README.md)  
   
 
 ---
