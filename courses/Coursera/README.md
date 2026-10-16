@@ -2,10 +2,6 @@
 
 ## Courses
 
-[Advanced Multi Agent AI System](Advanced~Multi-Agent-AI-System/README.md)  
-  
----
-  
 [Generative-AI-and-LLMs](Generative-AI-and-LLMs/README.md)  
   
 ---
@@ -14,6 +10,10 @@
 
 ---
 
+[Advanced Multi Agent AI System](Advanced~Multi-Agent-AI-System/README.md)  
+  
+---
+  
 ## Specializations
 
 [Docker and Kubernetes Masterclass](Docker-and-Kubernetes-Masterclass/README.md)  
