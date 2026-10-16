@@ -8,7 +8,7 @@
 
 [Course Content](https://www.coursera.org/learn/packt-advanced-docker-data-persistence-and-orchestration-iyqnj)
 
-[Course Notes](Docker Fundamentals/docker-fundamentals-notes.md)
+[Course Notes](Docker-Fundamentals/docker-fundamentals-notes.md)
   
 ---
   
@@ -18,7 +18,7 @@
 
 [Course Content ](https://www.coursera.org/learn/packt-advanced-docker-data-persistence-and-orchestration-iyqnj/home/)
 
-[Course Notes](Docker-2 Advanced/Docker2-notes.md)
+[Course Notes](Docker-Advanced/Docker2-notes.md)
 
 ---
 
@@ -28,7 +28,7 @@
 
 [Course Content](https://www.coursera.org/learn/packt-kubernetes-essentials-deploying-and-managing-applications-aa6tr/home/)
 
-[Course Notes](Kubernetes Essentials/kubernetes-essentials-notes.md)
+[Course Notes](Kubernetes-Essentials/kubernetes-essentials-notes.md)
 
 ---
 
@@ -38,4 +38,4 @@
 
 [Course Content](https://www.coursera.org/learn/packt-docker-fundamentals-understanding-containers-and-images-pxlac/home/)
 
-[Course Notes](Advanced Kubernetes/advanced-kubernetes-notes.md)
+[Course Notes](Advanced-Kubernetes/advanced-kubernetes-notes.md)
