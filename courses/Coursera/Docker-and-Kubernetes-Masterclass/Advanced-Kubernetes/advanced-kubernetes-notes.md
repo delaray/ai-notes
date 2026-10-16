@@ -6,15 +6,15 @@
 
 ### Full Specialization Resources
 
-![Resource Management](images/advanced-kubernetes--M1-01-resource-management)
+![Resource Management](images/advanced-kubernetes--M1-01-resource-management.png)
 
 ### Introduction to the Section
 
 ### Understanding Labels and Selectors
 
-![Labels and Selectors 1](images/advanced-kubernetes--M1-02-labels-and-selectors-1)
+![Labels and Selectors 1](images/advanced-kubernetes--M1-02-labels-and-selectors-1.png)
 
-![Labels and Selectors 2](images/advanced-kubernetes--M1-02-labels-and-selectors-2)
+![Labels and Selectors 2](images/advanced-kubernetes--M1-02-labels-and-selectors-2.png)
 
 ### Lab: Using Labels and Selectors in Kubectl
 
