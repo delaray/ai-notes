@@ -298,6 +298,14 @@ Added a **/up** endpoint to color-api/src/index.js
 
 ### Lab: Working with Liveliness Probes
 
+Very similar in syntax to startup probe.
+
+    livenessProbe:
+      httpGet:
+        path: /health
+        port: 80
+      failureThreshold: 3
+      periodSeconds: 10
 
 ### Lab: Working with Readiness Probes
 
