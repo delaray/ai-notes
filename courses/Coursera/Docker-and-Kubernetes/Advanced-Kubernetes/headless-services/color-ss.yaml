@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: color-ss
+spec:
+  serviceName: "color-svc"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: color-api
+  template:
+    metadata:
+      labels:
+        app: color-api
+    spec:
+      containers:
+      - name: color-api
+        image: delaray/color-api:1.2.1
+        ports:
+        - containerPort: 80  
+          name: web
+        volumeMounts:
+        - name: color-data
+          mountPath: /tmp/data
+  volumeClaimTemplates:
+  - metadata:
+      name: color-data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: standard
+      resources:
+        requests:
+          storage: 1Gi
+        

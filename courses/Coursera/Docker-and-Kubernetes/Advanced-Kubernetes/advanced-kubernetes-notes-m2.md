@@ -184,11 +184,92 @@ Stateful sets manage stateful applications more effectively.
 
 ### Lab: Creating Persistent Volumes with StatefulSets
   
-
 ### Lab: Deploying a StatefulSet
   
+	apiVersion: apps/v1
+	kind: StatefulSet
+	metadata:
+	  name: demo-ss
+	spec:
+	  serviceName: busybox
+	    replicas: 2
+	  selector:
+        matchLabels:
+		  app: busybox
+	  template:
+        metadata:
+		  labels:
+		    app: busybox
+		spec:
+		  containers:
+		  - name: busybox
+		    image: busybox:1.36.1
+			command: ["sh", "-c", "sleep 3600"]
+			resources:
+			  limits:
+			    memory: "128Mi"
+				cpu: "500m"
+			  requests:
+			    memory: "64Mi"
+				cpu: "250m"
+			volumeMounts:
+			- name: local-volume
+			  mountPath: /mnt/local
+	  volumeClaimTemplates:
+      - metadata:
+          name: local-volume
+        spec:
+		  accessModes: 
+            - ReadWriteOnce
+		  storageClassName: local-storage
+          resources:
+            requests:
+              storage: 128Mi 
+  
+With StatefulSets the string appended to the name is not random like with deployments.  
+  
+Pods have the StatefulSet name with the index appended to the name  
 
+	kubectl get pods
+
+	NAME        READY   STATUS    RESTARTS   AGE
+	demo-ss-0   1/1     Running   0          21s
+	demo-ss-1   1/1     Running   0          19s
+	
+PVCs have the volume-name, the StatefulSet name and the index appended to the name.  
+
+	kubectl get pvc 
+	
+	NAME                     STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS     AGE
+	local-volume-demo-ss-0   Bound    ss-0     128Mi      RWO            local-storage    2m13s
+	local-volume-demo-ss-1   Bound    ss-1     128Mi      RWO            local-storage    2m11s
+
+  
 ### Lab: StatefulSets with Dynamic Volume Provisioning
   
+Simply need to change the storage class to standard in above example
 
+	 storageClassName: standard
+	 
+	
 ### Lab: Using Headless Services
+
+Specify a ClusterIP of None to create a **headless service**:
+
+	apiVersion: v1
+	kind: Service
+	metadata:
+	  name: color-svc
+	spec:
+	  clusterIP: None
+	  ports:
+      - protocol: TCP
+		port: 80
+		targetPort: 80
+	  selector:
+		 app: color-api
+
+Purpose of a headless service is to provide a stable DNS so that we can talk to other pods.  
+The service has no IP address and cannot be accessed by name.  
+
+Headless services allow us to reach out to specific pods backed up by a StaefulSet.  
