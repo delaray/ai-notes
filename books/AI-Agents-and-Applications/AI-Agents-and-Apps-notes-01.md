@@ -1,5 +1,6 @@
 # AI Agents and Applications, Manning, 2026
 
+
 ## Book Resources
 
 GitHub: https://github.com/roberto-inf/building-llm-applications/tree/main
@@ -10,7 +11,7 @@ Drive: https://drive.google.com/drive/folders/1mX8u9j64NfMqFGppnt6hJc0x5bXRTOgL
 
 ---
 
-## Chapter 1:
+## Chapter 1
 
 ### This chapter covers
 

@@ -29,7 +29,8 @@
   
 - **Specialized Agents**
   - Tackle domain-specific tasks that require deep expertise
-  - Coding agents can navigate codebases, add features, fix bugs, and refactor code
+  - Coding agents can navigate codebases, add features, fix bugs,
+	and refactor code
   - Deep Research agents can conduct investigations across hundreds of sources
   
 All agents are powered by Large Language Models
@@ -673,7 +674,7 @@ discover and invoke them. This separation enables tool reuse across
 projects and providers.
 
 
-#------------------------------------------------------------------
+---
 
 ## Chapter 4: Implementing a basic ReAct agent
 
@@ -955,8 +956,9 @@ The parameters serve distinct purposes:
 
 #### Using structured output in practice
 
+---
 
-## Building knowledge bases with RAG
+## Chapter 5: Building Knowledge Bases with RAG
 
 ### This chapter covers
 
@@ -968,3 +970,442 @@ The parameters serve distinct purposes:
 - Extending agent capabilities through the callback pattern
 
 
+### Search
+
+**Keyword search**
+
+**Vector search**
+
+**Graph search**
+
+**Structure-based search**
+
+### Summary
+
+Internal data requires approaches other than web search. Single files can
+be read directly into context, but multiple files need exploration, and
+large-scale data requires search mechanisms to extract only relevant portions.
+
+Four search methods serve different purposes: keyword search for exact match-
+ing, vector search for semantic similarity, graph search for relationship
+traversal, and structure-based search for navigating organized filesystems.
+Production systems often use multiple methods.
+
+Vector search converts text to numerical vectors in which semantic similarity
+becomes geometric distance. The pipeline involves chunking long documents,
+generating embeddings, and calculating cosine similarity to find the most
+relevant content.
+
+Structure-based search uses filesystem organization as information in its own
+right. Folder names, filenames, and directory hierarchies provide meaningful
+metadata that agents can navigate using simple tools such as list_files and
+read_file.
+
+The callback pattern extends agent behavior without modifying core logic.
+before_tool_callback enables HITL approval for dangerous operations, and
+after_tool_callback enables automatic compression of search results.
+
+Context engineering through search dramatically reduces token use. In our exer-
+cise, extracting only relevant chunks reduced more than 37,000 tokens to 304
+tokens, achieving a 99% savings rate while preserving the information required
+to answer the query.
+
+---
+
+## Chapter 6: Adding Memory 
+
+### This Chapter Covers
+
+- Understanding the role of memory in LLM agents
+- Managing context growth with sliding window, compaction, and summarization
+- Implementing sessions for multiturn conversations
+- Building asynchronous human-in-the-loop workflows
+- Creating long-term memory for cross-session knowledge retention
+
+Memory is what separates a stateless tool from an intelligent assistan
+
+This chapter addresses memory in three use patterns:
+
+- **context optimization strategies**
+- **Session**and **SessionManager** classes
+- **long-term memory system**
+
+### The Anatomy of Agent Memory
+
+- Limitations of our current agent
+- Distinguish between short-term and long-term memory
+- Further divide short-term memory into two patterns based on agent use.
+
+
+#### Limitations of the current memory architecture
+
+- A problem of space
+- A problem of time
+
+#### Three challenges of the current memory architecture
+
+First three concepts that form the foundation of Agent memory
+
+- A **session** is a single, continuous conversation between a user and an agent.
+- **Short-term memory** stores the work done within a single session
+- **Long-term memory** is information that persists after sessions end
+
+![Long-Term Memory](images/BAAFS-Chpt06-01-Long-Term-Memory.png)
+
+  
+CHALLENGE 1: CONTEXT EXPLOSION
+- How to compress context during current execution.
+
+![Context-management Strategy](images/BAAFS-Chpt06-02-Context-Management-Strategy.png)
+
+  
+CHALLENGE 2: LACK OF CONVERSATION CONTINUITY
+- Need to implenet a **Session** to maintain continuity between calls to run()
+
+![With and Without a Session](images/BAAFS-Chpt06-03-With-and-Without-a-Session.png)
+
+
+CHALLENGE 3: LACK OF PERSISTENT KNOWLEDGE
+
+  
+#### Context Engineering and Memory
+
+Chapter 1 defined context engineering as the art of providing the right
+information at the right time and introduced five strategies (see below).
+This chapter is a hub in which three of these strategies converge
+
+	STRATEGY        DESCRIPTION
+	Generation      Constructing context with LLM-generated outputs
+	Retrieval       Bringing information from external sources into context
+	Write           Saving from context to external storage
+	Reduce          Compressing and deleting context
+	Isolate         Separating tasks/tools into distinct environments
+	
+
+Each challenge defines a use pattern that this chapter addresses:
+
+- Pattern 1, **in-run** context management (challenge 1):
+  Keeps context under control as it grows during a single run() call
+  
+- Pattern 2, **continuous execution** (challenge 2):
+  Maintains context across multiple run() calls within the same session
+  
+- Pattern 3, **long-term memory** (challenge 3):
+  Preserves and retrieves information after a session ends
+  
+  
+### Managing Context During Execution
+
+#### Separating storage from presentation
+
+The first principle of context management is separating storage from presentation. All events recorded in ExecutionContext.events remain immutable; only the
+LlmRequest.contents sent to the LLM are processed.
+
+WHY THIS SEPARATION MATTERS
+
+**ExecutionContext** is your ground truth: a complete, structured record of
+everything that happened.
+
+**LlmRequest** is simply a computed projection that you can refine and optimize
+for each specific model call.
+
+IMPLEMENTATION VIA CALLBACKS
+
+Chapter 4 introduced **before_llm_callback**. This callback executes 
+just before the LLM call, providing an opportunity to process the LlmRequest.
+
+
+The callback receives both **ExecutionContext** and **LlmRequest**. It
+reads the current state from ExecutionContext and modifies the contents
+of LlmRequest
+
+	before_llm_callback(context: ExecutionContext, request: LlmRequest)
+	-> Optional[LlmResponse]
+
+
+To apply context-optimization strategies flexibly, you adjust configuration
+values such as token thresholds.
+
+	def create_optimizer_callback(apply_optimization, threshold: int = 50000):
+		"""Factory function that creates a callback applying optimization
+		strategy"""
+		async def callback(
+			context: ExecutionContext,
+			request: LlmRequest
+			) -> Optional[LlmResponse]:
+			token_count = count_tokens(request)
+		
+			if token_count < threshold:
+				return None
+			
+			# Support both sync and async functions
+			result = apply_optimization(context, request)
+				if inspect.isawaitable(result):
+				await result
+			return None
+		return callback
+			
+#### Sliding-Window Strategy 
+
+BASIC IMPLEMENTATION
+
+The following function implements a sliding-window strategy with three steps:
+
+1. Iterate through the contents to find the user’s original question.
+2. Unconditionally preserve everything up to the user’s message, so that the
+   agent retains the problem context.
+3. Keep only the most recent window_size items from subsequent items
+   (assistant messages, tool calls, tool results).
+
+
+LIMITATIONS
+
+Therefore, more precise management requires measuring token counts directly.
+
+#### Token Counting
+
+INTRODUCING TIKTOKEN
+
+
+#### Compaction Strategy
+
+TOOLCALL COMPRESSION: WRITE OPERATIONS
+
+TOOLRESULT COMPRESSION: READ OPERATIONS
+
+IMPLEMENTATION
+
+TRADEOFFS WITH PROMPT CACHING
+
+
+#### Summarization Strategy
+
+SELECTING SUMMARIZATION TARGETS
+
+DESIGNING THE SUMMARY PROMPT
+
+IMPLEMENTATION
+
+COMPACTION VS. SUMMARIZATION
+
+
+#### Hierarchical Context Management
+
+
+### Long-term memory: Accumulating knowledge across sessions
+
+#### The structure of long-term memory
+
+The SessionManager we implemented earlier and the MemoryManager introduced here
+address different problems:
+
+**SessionManager** maintains conversation continuity within a session. 
+When you call run() multiple times with the same session_id, the previous
+conversation content is preserved. But starting a new conversation with
+a different session_id prevents access to the previous session content.
+
+**MemoryManager** stores important information even after a session
+ends, allowing retrieval and use in future sessions. Examples include “the user
+mentioned that they’re a marketer” or “the approach used when solving this
+problem before.
+  
+
+Long-term memory systems have two core operations:
+
+**Storage (Write)**
+**Retrieval (Read)**
+
+
+Recent memory libraries such as **Mem0** and **Graphiti** improve on this by
+using LLMs to extract only information worth preserving. When storing new
+information, these libraries perform one of four operations to manage
+conflicts with existing memories:
+
+1. **ADD** stores new information that doesn’t already exist.
+2. **UPDATE** modifies existing memories.
+3. **DELETE** removes contradictory memories.
+4. **SKIP** ignores information that’s already stored.
+
+
+#### Information extraction: Structured output
+
+EXTENDING LLMCLIENT
+DEFINING THE MEMORY SCHEMA
+EXTRACTION PROMPT DESIGN
+
+#### Building a vector store with ChromaDB 
+
+BASIC USE
+USING METADATA
+
+#### Implementing TaskMemoryManager 
+
+MEMORY EXTRACTION METHODS
+DUPLICATE CHECK METHOD
+SAVE METHOD
+SEARCH METHOD
+INTEGRATING MEMORYMANAGER INTO THE AGENT
+
+#### Retrieving Memories
+
+AUTOMATIC INJECTION WITH PROCESS_LLM_REQUEST
+INTEGRATING INTO THE AGENT
+
+### Summary
+
+- Memory transforms an agent from a stateless tool to an intelligent
+  assistant that learns and adapts across interactions.
+
+- The three use patterns address different challenges.
+  Pattern 1 (one-off execution) manages context within a single run,
+  Pattern 2 (continuous execution) maintains conversation across multiple runs
+  Pattern 3 (long-term memory) preserves knowledge across sessions.
+  
+- Context-management strategies follow a hierarchical approach: measure tokens,
+  apply compaction for tool results, and use summarization as a last resort. The
+  key principle is separating storage from presentation: ExecutionContext
+  remains immutable, whereas LlmRequest is optimized for each call.
+
+- Session and SessionManager enable multiturn conversations by persisting events
+  and state across run() calls. The same architecture supports asynchronous HITL
+  workflows, in which execution pauses for user approval and resumes when
+  confirmation arrives.
+
+- Long-term memory combines write and retrieval strategies. Structured informa-
+  tion is extracted from execution history, checked for duplicates, stored
+  in a vector database, and retrieved when it’s relevant to new tasks.
+
+- Memory retrieval can be implemented as an explicit tool the agent calls on
+  demand or as automatic injection via process_llm_request() that adds relevant
+  context before every LLM call.
+
+--- 
+
+
+## Chapter 7: Planning and Reflection for Complex Tasks
+
+### This chapter covers
+
+- The limitations of reactive agents in performing complex tasks
+- Planning tools that decompose problems into task lists
+- Reflection tools that enable progress checking and failure recovery
+- The complementary cycle of planning and reflection
+  
+
+### Planning: Setting direction
+
+#### When planning is necessary
+
+#### Implementing the planning tool
+
+#### Planning-tool example
+
+#### Extension directions
+
+
+### Reflection: Checking and correcting
+
+#### When reflection is necessary
+
+#### Implementing the reflection tool
+
+#### The real value of reflection: Failure recovery
+
+#### Running an agent that uses reflection for research synthesis
+
+
+### Integrating Planning and Reflection
+
+Planning solves mainly “looking ahead” problems
+Reflection solves “looking back” problems.
+
+### Summary
+
+- Planning and reflection give agents time to think. Instead of reacting moment by
+moment, agents plan before acting and check after acting. This grants metacog-
+nition: the ability to examine their own process.
+
+- Planning decomposes complex problems into clear, manageable units. When
+“1. Research Kipchoge’s record, 2. Research Moon distance, 3. Calculate time”
+is recorded in the context, the LLM references this plan to maintain direction
+across multiple steps.
+
+- Reflection is valuable when problems arise, not when everything goes smoothly.
+When tools fail or results are unexpected, reflection enables cause analysis and
+alternative strategies instead of repeating the same failures.
+
+- Planning and reflection form a complementary cycle. Planning provides direc-
+tion; reflection checks that direction and, when necessary, triggers replanning.
+Neither works in isolation.
+
+- From a context-engineering perspective, both strategies are Generation strat-
+egies. Planning adds “what to do next” to the context, while reflection adds
+“evaluation and direction so far.” These texts influence the LLM’s subsequent
+decisions.
+
+---
+
+## Empowering Agents with Code Execution
+
+### This chapter covers
+
+- Understanding the limitations of predefined tool approaches and the
+  benefits  of code execution
+- Connecting code-execution environments to agents
+- Porting tools to sandboxes for efficient execution
+- Providing complete workspaces with filesystems and the CLI
+- Using agent skills for hierarchical tool management
+  
+  
+### Summary
+
+- The predefined-tool approach has three limitations: the agent’s action space 
+  is restricted to the developer-defined tool list; executing one tool per
+  LLM call is inefficient; and as tools proliferate, prompt token costs
+  increase while the LLM’s tool-selection accuracy decreases.
+
+- Code execution provides three core capabilities: control flow through 
+  conditionals and loops, data flow by storing intermediate results in
+  variables, and tool composition by combining small functions to create
+  new functionality.
+
+- Sandboxes are isolated environments for executing LLM-generated code safely.
+  They provide host-system security protection, resource management for CPU
+  and memory, and recoverability when problems occur.
+
+- Tool composition can be implemented by extracting the source code of
+  user-defined tools and registering them in the sandbox. This approach 
+  maximizes token efficiency in processing large amounts of data when you
+  need only aggregation or summaries.
+
+- A workspace is a complete working environment that combines code execution,
+  a filesystem, and a CLI. Just as human developers write code, save files,
+  and execute commands in the terminal, agents can work in the same environment.
+
+- Agent skills is an approach that progressively discloses tool information.
+  Only skill names and one-line descriptions are included in the prompt;
+  actual use is learned when the LLM determines that a skill is required
+  and reads the SKILL.md file.
+
+- Agent tools can be divided into three layers: core tools, which are always
+  included in the prompt (execute_python, bash_tool, and upload_file);
+  installable tools, which have only summaries in the prompt and detailed
+  definitions in the filesystem (agent skills); and generated tools, for which
+  the LLM writes code on thespot as needed.
+
+- The essence of the hierarchical tool structure is to offload tool definitions
+  from the prompt to a workspace. From a context-engineering perspective,
+  the workspace is a powerful method for removing tool information and
+  tool-execution results that don’t require LLM judgment from the context.
+  
+---
+
+## Chapter 9: Orchestrating Multi-agent Systems
+
+### This chapter covers
+
+- Using three collaboration patterns: Workflow, Agent as Tool, and Transfer
+- Implementing composable workflows with Sequential, Parallel, and Loop
+- Wrapping agents as tools with context isolation
+- Transferring control between agents using a dynamically created transfer tool
+- Connecting agents across networks with the A2A protocol
